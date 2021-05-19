@@ -1,7 +1,7 @@
 #!/bin/bash
 # ref https://docs.mainsail.xyz/setup/manual-setup/mainsail
 
-MAINSAIL_DIR=${STEERSMAN_HOME}/mainsail
+MAINSAIL_DIR=${STEERSMAN_DIR}/mainsail
 
 setup_nginx()
 {

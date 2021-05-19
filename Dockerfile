@@ -1,39 +1,34 @@
 FROM ubuntu:20.04
-ENV STEERSMAN_CONFIG=/config
-ENV STEERSMAN_HOME=/steersman
+LABEL version="1.1"
+LABEL maintainer="voydz <voydz@hotmail.com>"
+LABEL description="A docker image for running klipper, moonraker and mainsail from arbitary hardware."
 
-# environment setup
-ENV KLIPPER_VENV=${STEERSMAN_HOME}/klipper/env
-ENV KLIPPER_DIR=${STEERSMAN_HOME}/klipper/src
-
-ENV MOONRAKER_VENV=${STEERSMAN_HOME}/moonraker/env
-ENV MOONRAKER_DIR=${STEERSMAN_HOME}/moonraker/src
-
+# fallback timezone
 ENV TZ=UTC
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-# os dependencies
-RUN apt update \
-    && apt install -y sudo supervisor git dfu-util unzip nginx wget
+# environment setup
+ENV STEERSMAN_CONFIG=/home/steersman
+ENV STEERSMAN_DIR=/steersman
 
-COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+ENV KLIPPER_VENV=${STEERSMAN_DIR}/klipper/env
+ENV KLIPPER_DIR=${STEERSMAN_DIR}/klipper/src
 
-# add steersman user
-RUN useradd -ms /bin/bash steersman 
-RUN adduser steersman sudo
-RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+ENV MOONRAKER_VENV=${STEERSMAN_DIR}/moonraker/env
+ENV MOONRAKER_DIR=${STEERSMAN_DIR}/moonraker/src
 
-# setup workdir
-COPY docker ${STEERSMAN_HOME}
-WORKDIR ${STEERSMAN_HOME}
-RUN chown -R steersman:steersman ${STEERSMAN_HOME}
+COPY config /default_config
+COPY docker ${STEERSMAN_DIR}
 
-# install klipper, moonraker and mainsail
+WORKDIR ${STEERSMAN_DIR}
+
+# prepare requirements
+RUN ./provision.sh
+
+# run install scripts
 RUN klipper/setup.sh
 RUN moonraker/setup.sh
 RUN mainsail/setup.sh
-
-RUN chown -R steersman:steersman ${STEERSMAN_CONFIG}
 
 EXPOSE 80
 
