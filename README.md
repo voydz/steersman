@@ -29,7 +29,6 @@ docker run --name steersman -d -p 80:80 \
 After you booted the container you will end up with a tree at `/path/to/your/config` that looks like this:
 ```
 config
-├── database            # Moonraker database, not served publicly
 ├── gcode_files         # Your virtual sdcard
 └── klipper_config      # Config files for klipper and moonraker
     ├── moonraker.conf
