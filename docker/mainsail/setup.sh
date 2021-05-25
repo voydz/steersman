@@ -3,3 +3,5 @@
 
 # run install script
 ${STEERSMAN_DIR}/mainsail/install.sh
+
+chown -R steersman:steersman ${MAINSAIL_DIR}

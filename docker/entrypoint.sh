@@ -12,5 +12,5 @@ copy_if_not_exists()
 copy_if_not_exists "gcode_files"
 copy_if_not_exists "klipper_config"
 
-# launch all services through supervisor
-/usr/bin/supervisord
+# launch all services
+/usr/bin/systemctl --init

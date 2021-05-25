@@ -60,7 +60,12 @@ config_path: ~/klipper_config
 trusted_clients:
     172.17.0.0/16
 
-# for notes on updating see "Known Issues"
+[update_manager]
+
+[update_manager client mainsail]
+type: web
+repo: meteyou/mainsail
+path: steersman/mainsail/src # to update mainsail inside the container
 ```
 Trouble? See [mainsail docs for moonraker](https://docs.mainsail.xyz/setup/manual-setup/moonraker#configuration)
 
@@ -74,10 +79,9 @@ Trouble? See [mainsail docs for moonraker](https://docs.mainsail.xyz/setup/manua
 3. Follow instructions on building the firmware from the [klipper docs](https://www.klipper3d.org/Installation.html#building-and-flashing-the-micro-controller)
 4. You may copy the firmware to the `/config` dir (i.e. `cp /steersman/klipper/src/out/klipper.elf.hex /config/`) and get it outside of the container.
 
+## Noteworthy
+* **Webcams** can be passed as devices and should work in theory, but I did not test mjpegstreamer
+* **GPIO** I/O may also be passed as devices, and should work, but did not test it
+
 ## Known issues
-* **Updates** for klipper, moonraker and mainsail from within mainsail will work partially
-    * this should be no issue as this software is updated as you update the docker image 
-* **Webcams** are not supported at this point
-* **GPIO** is not supported at this point (thus `[power]` config directives will not work and even crash the software stack)
-* **Service restart** is not supported (i.e. from mainsail "power" menu)
-* It should go without saying, but **host control** (i.e. from mainsail "power" menu) is not supported either 
+* **host control** (i.e. from mainsail "power" menu) is not supported either 
